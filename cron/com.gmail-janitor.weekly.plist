@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- macOS launchd agent: run gmail-janitor weekly (Mon 09:00).
+     Install:
+       cp cron/com.gmail-janitor.weekly.plist ~/Library/LaunchAgents/
+       # edit the ProgramArguments path + EnvironmentVariables below first
+       launchctl load ~/Library/LaunchAgents/com.gmail-janitor.weekly.plist
+     Uninstall:
+       launchctl unload ~/Library/LaunchAgents/com.gmail-janitor.weekly.plist -->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.gmail-janitor.weekly</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/ABSOLUTE/PATH/TO/gmail-janitor/cron/weekly.sh</string>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>GMAIL_JANITOR_ACCOUNT</key>
+        <string>you@gmail.com</string>
+        <key>GMAIL_JANITOR_SLOT</key>
+        <string>0</string>
+    </dict>
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Weekday</key><integer>1</integer>
+        <key>Hour</key><integer>9</integer>
+        <key>Minute</key><integer>0</integer>
+    </dict>
+    <key>StandardOutPath</key>
+    <string>/tmp/gmail-janitor.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/gmail-janitor.err.log</string>
+</dict>
+</plist>

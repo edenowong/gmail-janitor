@@ -1,0 +1,12 @@
+# personal sender lists — never commit your own data
+senders.txt
+keep.txt
+junk.txt
+cron/maintained_senders.txt
+cron/last_histogram.txt
+
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+*.log

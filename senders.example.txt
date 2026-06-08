@@ -1,0 +1,10 @@
+# One sender email or domain per line. Lines starting with # are ignored.
+# Used by:  janitor.py unsubscribe --senders senders.txt --apply
+#           janitor.py filter      --senders keep.txt    --apply
+#
+# Copy to senders.txt / keep.txt (gitignored) and fill with YOUR senders,
+# usually pulled from `python janitor.py histogram`.
+
+promos@example-store.com
+newsletter@example-brand.com
+example-marketing.com
