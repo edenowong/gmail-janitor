@@ -192,17 +192,29 @@ def cmd_archive(g, args):
         return
     g.search(args.query)
     total = 0
+    sig = "() => { const r=document.querySelector('tr.zA'); return r ? r.innerText.slice(0,80) : ''; }"
     for i in range(args.max_passes):
         n = g.ev(JS_ROWS)
         if n == 0:
             break
-        g.ev(JS_SELECT_ALL_VISIBLE)
-        time.sleep(0.7)
-        if not g.ev(JS_ARCHIVE):
-            print("  no archive button — stopping")
+        before = g.ev(sig)
+        # REAL clicks via Playwright — Gmail's toolbar ignores JS element.click(),
+        # so JS_SELECT_ALL_VISIBLE / JS_ARCHIVE (element.click) silently no-op and
+        # the loop spins. Dispatch real mouse events instead.
+        try:
+            g.page.locator('div[role="checkbox"][aria-label^="Select"]').first.click(timeout=4000)
+            time.sleep(0.6)
+            g.page.get_by_role("button", name="Archive", exact=True).first.click(timeout=4000)
+        except Exception as e:
+            print(f"  click failed ({e}); stopping")
+            break
+        time.sleep(2.0)
+        if g.ev(sig) == before and g.ev(JS_ROWS) == n:
+            # anti-spin guard: nothing changed -> archive didn't take, bail loudly
+            print("  WARNING: archive had no effect (page unchanged). "
+                  "Prefer `filter --apply` (server-side apply-to-existing) for bulk. Stopping.")
             break
         total += n
-        time.sleep(2.0)
         print(f"  pass {i+1}: archived ~{n} (total ~{total})", flush=True)
     print(f"  done. archived ~{total}. NOTE: for deep backlogs prefer a filter "
           f"(skip-inbox + apply-to-existing) — one server-side op vs N page loops.")

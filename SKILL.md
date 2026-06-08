@@ -29,6 +29,7 @@ Clean a Gmail inbox the right way: stop the inflow, then clear the backlog. Driv
 - `category:` searches **ignore date operators** (`older_than`/`before` → zero results). Use `category:promotions` undated, or `label:^unsub older_than:Xm` (label form takes dates).
 - "Select all conversations that match" **doesn't render** for `category:` searches or "Most relevant" sort → archive runs as a page-by-page loop, or (better) via a filter's apply-to-existing.
 - Filters auto-follow label renames (Gmail tracks labels by ID), so restructuring labels won't break filters.
+- **Gmail's Archive toolbar button ignores JS `element.click()`** — it only responds to a real mouse event. A page-loop that archives via JS click silently no-ops and **spins** (counts pages without moving mail). Use a real click (Playwright `get_by_role`/CDP mouse) AND verify the first row changed each pass. **For deep backlogs, prefer `filter --apply`** (server-side apply-to-existing clears everything in one op) over any UI loop. The API backend (`janitor_api.py`, `batchModify`) avoids this entirely.
 
 ## Labels (optional restructure)
 
