@@ -32,7 +32,17 @@ Clean a Gmail inbox the right way: stop the inflow, then clear the backlog. Driv
 
 ## Labels (optional restructure)
 
-If the user has label sprawl: collapse the flat list into nested trees (`Travel/`, `Finance/`, `Work/`, ...) by renaming each label to `Parent/Leaf` in `#settings/labels` (Edit → set name → uncheck "Nest label under" → Save). Drive labels via filters going forward. Flag true duplicates (two labels for the same thing) for the user to pick a canonical — merging moves mail and isn't auto.
+If the user has label sprawl: collapse the flat list into nested trees (`Travel/`, `Finances/`, `Work/`, ...). Drive labels via filters going forward. Flag true duplicates (two labels for the same thing) for the user to pick a canonical — merging moves mail and isn't auto.
+
+### Nesting — ALWAYS verify, it has sharp edges
+
+Gmail nesting is NOT just "put a slash in the name". Hard-won rules:
+
+1. **The parent label must already exist as a real label.** Renaming a label to `Parent/Child` does NOT auto-create `Parent`. If `Parent` doesn't exist, the child renders **flat** as a literal label named `Parent/Child` — looks nested in the name, is not nested in the tree.
+2. **You cannot create a bare parent while `Parent/X` children already exist.** Gmail reserves the name and the create **silently no-ops** (no error toast, no row). So create parents BEFORE renaming children into them — or if you nested first, see step 4.
+3. **Some parent names are reserved** (collide with Gmail system/category labels). The create silently fails. If a name won't take, pick an alternative (`Finance`→`Finances`, `Accounts`→`Logins`) and rename children into the alternative.
+4. **Recovery when children are already flat `Parent/X`:** create a parent with an *available* name (`Finances`), then rename each flat `Finance/Amex` → `Finances/Amex`. It now nests under the real parent.
+5. **VERIFY, don't trust the "Saved" click.** After nesting, confirm from the source of truth: open a child's Edit → "Nest label under" dropdown. Properly-nested children appear as **leaf names** (`Vegas`); unnested ones appear with **full slash paths** (`Finance/Amex`). Or check the nav: a real parent shows as an expandable group. A batch reporting "OK" only means the Save button fired — it is NOT evidence the label nested or even persisted (tab-pile lag silently drops saves).
 
 ## Automation
 
