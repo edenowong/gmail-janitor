@@ -17,7 +17,18 @@ Inbox cleanup in 2026 is a systems problem, not a willpower problem. The long ta
 
 This tool automates steps 1-3.
 
-## How it works
+## Two backends
+
+| | `janitor.py` (CDP/UI) | `janitor_api.py` (REST API) — recommended |
+|---|---|---|
+| Setup | none — uses your logged-in Chrome | one-time OAuth (~5 min, see [SETUP_API.md](SETUP_API.md)) |
+| Speed | 50/page UI loop | thousands per `batchModify` call |
+| Counts | Gmail caps big counts at "many" | exact-ish (`resultSizeEstimate`) |
+| Reliability | UI drifts; "select all matching" gaps | deterministic |
+
+Use the API backend for anything bulk. The CDP backend is the zero-setup fallback (and the only option if you can't create an OAuth client).
+
+## How it works (CDP backend)
 
 Connects to your running Chrome over the DevTools Protocol (CDP) via Playwright `connect_over_cdp`, finds your Gmail tab, and operates the UI. Because it uses *your* session, it sees exactly what you see and needs no credentials.
 

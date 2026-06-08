@@ -5,6 +5,10 @@ junk.txt
 cron/maintained_senders.txt
 cron/last_histogram.txt
 
+# OAuth secrets — never commit
+credentials.json
+token.json
+
 __pycache__/
 *.pyc
 .venv/
